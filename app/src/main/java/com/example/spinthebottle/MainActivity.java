@@ -1,52 +1,59 @@
 package com.example.spinthebottle;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
-
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ImageView bottle;
-    private Random random = new Random();
-    private int lastDir;
-    private boolean spinning;
+    private ImageView bot;
+    private Random rand = new Random();
+    private int lstDr;
+    private boolean spn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        bottle = findViewById(R.id.bottle);
+        bot = findViewById(R.id.bottle);
     }
 
+    //onClick function
     public void spinBottle(View v) {
-        if (!spinning) {
-            int newDir = random.nextInt(1800);
-            float pivotX = bottle.getWidth() / 2;
-            float pivotY = bottle.getHeight() / 2;
-            Animation rotate = new RotateAnimation(lastDir, newDir, pivotX, pivotY);
-            rotate.setDuration(2500);
-            rotate.setFillAfter(true);
-            rotate.setAnimationListener(new Animation.AnimationListener() {
+        //check if the bottled has stopped spinning
+        if (!spn) {
+            //generate a random number from 1-1800
+            int num = rand.nextInt(1800);
+            //set the pivot to the centre of the image
+            float pX = bot.getWidth() / 2;
+            float pY = bot.getHeight() / 2;
+            //pass parameters in RoatateAnimation function
+            Animation rot = new RotateAnimation(lstDr, num, pX, pY);
+            //set rotate duration 2500 millisecs
+            rot.setDuration(2500);
+            //rotation will persist after finishing
+            rot.setFillAfter(true);
+            rot.setAnimationListener(new Animation.AnimationListener() {
                 @Override
                 public void onAnimationStart(Animation animation) {
-                    spinning = true;
+                    spn = true;
                 }
                 @Override
                 public void onAnimationEnd(Animation animation) {
-                    spinning = false;
+                    spn = false;
                 }
                 @Override
                 public void onAnimationRepeat(Animation animation) {
                 }
             });
-            lastDir = newDir;
-            bottle.startAnimation(rotate);
+            //change the last direction
+            lstDr = num;
+            //start the animation
+            bot.startAnimation(rot);
         }
     }
 
